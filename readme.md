@@ -30,7 +30,9 @@ sh da_scripts/ucihar/run_main.sh
 ```
 
 ## Full Dataset Download.
-We have uploaded the pre-processed datasets for UCIHAR, WISDM, HHAR, PTB for this code base in the below link. Download them and save them under src/data/{DATA_NAME}/
+We have uploaded the pre-processed datasets for UCIHAR, WISDM, HHAR, PTB for this code base in the below link. Download them and save them under `src/data/{DATA_NAME}/`
+
+[Download](https://drive.google.com/drive/folders/10GKjHz_PWkMl2Fbqu9TCY0FdlyJGKcFQ?usp=sharing)
 
 ## Full Example
 ```sh 
