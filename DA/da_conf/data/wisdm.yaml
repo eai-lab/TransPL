@@ -1,0 +1,12 @@
+data_name: wisdm
+features_save_dir: wisdm
+data_type: cls
+
+c_in: 3
+seq_len: 128
+num_class: 6
+
+da_data:
+  folder_dir: WISDM
+  src: 23
+  trg: 32

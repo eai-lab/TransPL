@@ -1,0 +1,30 @@
+defaults:
+  - data: hhar           
+  - task: train_from_src
+  - light_model_src: cls_light_myvqvae_double
+  - light_model_trg: cls_light_myvqvae_double_adapt
+  - da_model: cls_myvqvae_double
+  - feature_alignment: pot
+  - likelihood: default
+  - override hydra/job_logging: colorlog
+  - override hydra/hydra_logging: colorlog
+
+exp_num: 9998
+seed: 42
+gpu_id: 1
+benchmark: False
+deterministic: False
+save_cls_representations: False
+
+
+logger:
+  project_name: ANNONYMIZED
+  mode: debug #debug or async
+  name: "${task.task_name}_${da_model.da_model_name}_EXP${exp_num}"
+  api_key: ANNONYMIZED
+
+
+save_output_path: da_outputs/${data.data_name}/EXP${exp_num}
+hydra:
+  run:
+    dir: ${save_output_path}

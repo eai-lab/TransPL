@@ -1,0 +1,13 @@
+data_name: ptb
+features_save_dir: ptb
+data_type: cls
+
+c_in: 15
+seq_len: 300
+num_class: 2
+
+
+da_data:
+  folder_dir: PTB
+  src: 1
+  trg: 2

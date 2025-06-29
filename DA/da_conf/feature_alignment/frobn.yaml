@@ -1,0 +1,8 @@
+
+
+aligner: 
+  aligner_name: frobn
+  metric: 'kmeans' # select between 'threshold', 'percentile', 'topk', 'bottomk', "kmeans", "reverse_kmeans"
+  non_aligned_threshold: 1.0 # Use values below threshold as aligned.
+  non_aligned_percentile: 0.2 # 0.2 means 20% of the data are assumed to be non-aligned
+  non_aligned_k: 1 # 

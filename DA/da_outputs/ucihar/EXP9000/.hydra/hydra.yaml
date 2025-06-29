@@ -1,0 +1,209 @@
+hydra:
+  run:
+    dir: ${save_output_path}
+  sweep:
+    dir: multirun/${now:%Y-%m-%d}/${now:%H-%M-%S}
+    subdir: ${hydra.job.num}
+  launcher:
+    _target_: hydra._internal.core_plugins.basic_launcher.BasicLauncher
+  sweeper:
+    _target_: hydra._internal.core_plugins.basic_sweeper.BasicSweeper
+    max_batch_size: null
+    params: null
+  help:
+    app_name: ${hydra.job.name}
+    header: '${hydra.help.app_name} is powered by Hydra.
+
+      '
+    footer: 'Powered by Hydra (https://hydra.cc)
+
+      Use --hydra-help to view Hydra specific help
+
+      '
+    template: '${hydra.help.header}
+
+      == Configuration groups ==
+
+      Compose your configuration from those groups (group=option)
+
+
+      $APP_CONFIG_GROUPS
+
+
+      == Config ==
+
+      Override anything in the config (foo.bar=value)
+
+
+      $CONFIG
+
+
+      ${hydra.help.footer}
+
+      '
+  hydra_help:
+    template: 'Hydra (${hydra.runtime.version})
+
+      See https://hydra.cc for more info.
+
+
+      == Flags ==
+
+      $FLAGS_HELP
+
+
+      == Configuration groups ==
+
+      Compose your configuration from those groups (For example, append hydra/job_logging=disabled
+      to command line)
+
+
+      $HYDRA_CONFIG_GROUPS
+
+
+      Use ''--cfg hydra'' to Show the Hydra config.
+
+      '
+    hydra_help: ???
+  hydra_logging:
+    version: 1
+    formatters:
+      colorlog:
+        (): colorlog.ColoredFormatter
+        format: '[%(cyan)s%(asctime)s%(reset)s][%(purple)sHYDRA%(reset)s] %(message)s'
+    handlers:
+      console:
+        class: logging.StreamHandler
+        formatter: colorlog
+        stream: ext://sys.stdout
+    root:
+      level: INFO
+      handlers:
+      - console
+    disable_existing_loggers: false
+  job_logging:
+    version: 1
+    formatters:
+      simple:
+        format: '[%(asctime)s][%(name)s][%(levelname)s] - %(message)s'
+      colorlog:
+        (): colorlog.ColoredFormatter
+        format: '[%(cyan)s%(asctime)s%(reset)s][%(blue)s%(name)s%(reset)s][%(log_color)s%(levelname)s%(reset)s]
+          - %(message)s'
+        log_colors:
+          DEBUG: purple
+          INFO: green
+          WARNING: yellow
+          ERROR: red
+          CRITICAL: red
+    handlers:
+      console:
+        class: logging.StreamHandler
+        formatter: colorlog
+        stream: ext://sys.stdout
+      file:
+        class: logging.FileHandler
+        formatter: simple
+        filename: ${hydra.job.name}.log
+    root:
+      level: INFO
+      handlers:
+      - console
+      - file
+    disable_existing_loggers: false
+  env: {}
+  mode: RUN
+  searchpath: []
+  callbacks: {}
+  output_subdir: .hydra
+  overrides:
+    hydra:
+    - hydra.job.chdir=False
+    - hydra.mode=RUN
+    task:
+    - data=ucihar
+    - data.da_data.src=2
+    - data.da_data.trg=11
+    - task=train_from_src
+    - logger.mode=debug
+    - task.limit_train_batches=1.0
+    - task.limit_val_batches=1.0
+    - gpu_id=0
+    - light_model_src=cls_light_myvqvae_double
+    - light_model_trg=cls_light_myvqvae_double_adapt
+    - exp_num=9000
+    - da_model=cls_myvqvae_double
+    - da_model.patch_len=8
+    - da_model.num_layers=2
+    - da_model.coarse_num_code=8
+    - da_model.fine_num_code=64
+    - da_model.d_model=64
+    - da_model.coarse_kmeans_init=true
+    - da_model.fine_kmeans_init=true
+    - da_model.pseudo_label_confidence_topk_sampling=True
+    - da_model.pseudo_topk_percent=0.5
+    - feature_alignment=pot
+    - likelihood.use_trg_class_prior=false
+    - likelihood.use_distance_weighting=true
+    - likelihood.gaussian_sim.sigma=0.2
+    - light_model_src.optimizer.lr=0.0005
+    - light_model_src.callbacks.max_epochs=200
+    - light_model_src.dataset.batch_size=32
+    - light_model_trg.optimizer.lr=0.0005
+    - light_model_trg.optimizer.decay=0.01
+    - light_model_trg.callbacks.max_epochs=200
+    - light_model_trg.dataset.batch_size=32
+    - light_model_trg.kd.kd_lambda=
+    - light_model_trg.callbacks.patience=5
+    - seed=2020
+    - deterministic=true
+  job:
+    name: main
+    chdir: false
+    override_dirname: da_model.coarse_kmeans_init=true,da_model.coarse_num_code=8,da_model.d_model=64,da_model.fine_kmeans_init=true,da_model.fine_num_code=64,da_model.num_layers=2,da_model.patch_len=8,da_model.pseudo_label_confidence_topk_sampling=True,da_model.pseudo_topk_percent=0.5,da_model=cls_myvqvae_double,data.da_data.src=2,data.da_data.trg=11,data=ucihar,deterministic=true,exp_num=9000,feature_alignment=pot,gpu_id=0,light_model_src.callbacks.max_epochs=200,light_model_src.dataset.batch_size=32,light_model_src.optimizer.lr=0.0005,light_model_src=cls_light_myvqvae_double,light_model_trg.callbacks.max_epochs=200,light_model_trg.callbacks.patience=5,light_model_trg.dataset.batch_size=32,light_model_trg.kd.kd_lambda=,light_model_trg.optimizer.decay=0.01,light_model_trg.optimizer.lr=0.0005,light_model_trg=cls_light_myvqvae_double_adapt,likelihood.gaussian_sim.sigma=0.2,likelihood.use_distance_weighting=true,likelihood.use_trg_class_prior=false,logger.mode=debug,seed=2020,task.limit_train_batches=1.0,task.limit_val_batches=1.0,task=train_from_src
+    id: ???
+    num: ???
+    config_name: da_config
+    env_set: {}
+    env_copy: []
+    config:
+      override_dirname:
+        kv_sep: '='
+        item_sep: ','
+        exclude_keys: []
+  runtime:
+    version: 1.3.2
+    version_base: '1.3'
+    cwd: /workspace/transPL_submit/DA
+    config_sources:
+    - path: hydra.conf
+      schema: pkg
+      provider: hydra
+    - path: /workspace/transPL_submit/DA/da_conf
+      schema: file
+      provider: main
+    - path: hydra_plugins.hydra_colorlog.conf
+      schema: pkg
+      provider: hydra-colorlog
+    - path: ''
+      schema: structured
+      provider: schema
+    output_dir: /workspace/transPL_submit/DA/da_outputs/ucihar/EXP9000
+    choices:
+      likelihood: default
+      feature_alignment: pot
+      da_model: cls_myvqvae_double
+      light_model_trg: cls_light_myvqvae_double_adapt
+      light_model_src: cls_light_myvqvae_double
+      task: train_from_src
+      data: ucihar
+      hydra/env: default
+      hydra/callbacks: null
+      hydra/job_logging: colorlog
+      hydra/hydra_logging: colorlog
+      hydra/hydra_help: default
+      hydra/help: default
+      hydra/sweeper: basic
+      hydra/launcher: basic
+      hydra/output: default
+  verbose: false

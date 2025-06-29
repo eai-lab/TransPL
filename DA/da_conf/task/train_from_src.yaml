@@ -1,0 +1,9 @@
+task_name: train_from_src
+
+source_model:
+  source_model_path: none 
+  source_transition_matrix_path: none
+  
+fast_dev_run: False 
+limit_train_batches: 1.0
+limit_val_batches: 1.0

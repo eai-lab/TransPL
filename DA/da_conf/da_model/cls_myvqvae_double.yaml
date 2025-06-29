@@ -1,0 +1,27 @@
+da_model_name: cls_myvqvae_double
+
+d_model: 64
+patch_len: 8 #8
+drop_out: 0.3
+hidden_channels: 16
+num_layers: 2
+
+
+# Codebook
+coarse_num_code: 4
+fine_num_code: 64
+activation: 'gelu'
+commitment_cost: 0.25
+
+
+coarse_kmeans_init: True
+fine_kmeans_init: True
+
+# Pseudo Label Confident Sampling
+# If False, use KL divergence for all.
+# If True, use hard label for topk percent of the data. and KL divergence for the rest.
+pseudo_label_confidence_topk_sampling: True 
+pseudo_topk_percent: 0.1
+
+# Defaults
+linear_dropout: 0.0

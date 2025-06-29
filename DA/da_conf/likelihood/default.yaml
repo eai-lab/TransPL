@@ -1,0 +1,6 @@
+use_trg_class_prior: True
+use_distance_weighting: True
+likelihood_penalty:  0.0001 #0.0001
+gaussian_sim:
+  sigma: 0.5
+prior_temperature: 1.0 # Higher > 1 makes the prior more uniform.

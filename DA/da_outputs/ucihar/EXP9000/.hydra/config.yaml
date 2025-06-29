@@ -1,0 +1,105 @@
+data:
+  data_name: ucihar
+  features_save_dir: ucihar
+  data_type: cls
+  c_in: 9
+  seq_len: 128
+  num_class: 6
+  da_data:
+    folder_dir: HAR
+    src: 2
+    trg: 11
+task:
+  task_name: train_from_src
+  source_model:
+    source_model_path: none
+    source_transition_matrix_path: none
+  fast_dev_run: false
+  limit_train_batches: 1.0
+  limit_val_batches: 1.0
+light_model_src:
+  light_name: cls_light_myvqvae_double
+  optimizer:
+    lr: 0.0005
+  scheduler: none
+  callbacks:
+    monitor: val_loss
+    check_val_every_n_epoch: 2
+    max_epochs: 200
+    max_steps: -1
+    save_top_k: 1
+    monitor_mode: min
+    patience: 2
+    min_delta: 0
+  dataset:
+    batch_size: 32
+    num_workers: 4
+light_model_trg:
+  light_name: cls_light_myvqvae_double_adapt
+  optimizer:
+    lr: 0.0005
+    decay: 0.01
+  scheduler:
+    warmup_step: 50
+  callbacks:
+    monitor: val_loss
+    check_val_every_n_epoch: 2
+    max_epochs: 200
+    max_steps: -1
+    save_top_k: 1
+    monitor_mode: min
+    patience: 5
+    min_delta: 0
+  dataset:
+    batch_size: 32
+    num_workers: 4
+  kd:
+    kd_lambda: ''
+    temperature: 2.0
+  freeze_module:
+  - coarse_vq
+  - fine_vq
+  - decoder
+  - reconstruct_decoder
+da_model:
+  da_model_name: cls_myvqvae_double
+  d_model: 64
+  patch_len: 8
+  drop_out: 0.3
+  hidden_channels: 16
+  num_layers: 2
+  coarse_num_code: 8
+  fine_num_code: 64
+  activation: gelu
+  commitment_cost: 0.25
+  coarse_kmeans_init: true
+  fine_kmeans_init: true
+  pseudo_label_confidence_topk_sampling: true
+  pseudo_topk_percent: 0.5
+  linear_dropout: 0.0
+feature_alignment:
+  aligner:
+    aligner_name: pot
+    metric: kmeans
+    non_aligned_threshold: 1.0
+    non_aligned_percentile: 0.2
+    non_aligned_k: 1
+likelihood:
+  use_trg_class_prior: false
+  use_distance_weighting: true
+  likelihood_penalty: 0.0001
+  gaussian_sim:
+    sigma: 0.2
+  prior_temperature: 1.0
+exp_num: 9000
+seed: 2020
+gpu_id: 0
+benchmark: false
+deterministic: true
+save_cls_representations: false
+logger:
+  project_name: TEAMDEMA/recbamteam
+  mode: debug
+  name: ${task.task_name}_${da_model.da_model_name}_EXP${exp_num}
+  api_key: eyJhcGlfYWRkcmVzcyI6Imh0dHBzOi8vYXBwLm5lcHR1bmUuYWkiLCJhcGlfdXJsIjoiaHR0cHM6Ly9hcHAubmVwdHVuZS5haSIsImFwaV9rZXkiOiJiMDFkM2MzNi1iYWFlLTQ4MTUtOGYxYS02NmIzM2NmNWNiZGEifQ==
+save_output_path: da_outputs/${data.data_name}/EXP${exp_num}

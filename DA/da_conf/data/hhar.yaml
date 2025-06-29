@@ -1,0 +1,12 @@
+data_name: hhar
+features_save_dir: hhar
+data_type: cls
+
+c_in: 3
+seq_len: 128
+num_class: 6
+
+da_data:
+  folder_dir: HHAR
+  src: 0
+  trg: 8

@@ -1,0 +1,12 @@
+data_name: ucihar
+features_save_dir: ucihar
+data_type: cls
+
+c_in: 9
+seq_len: 128
+num_class: 6
+
+da_data:
+  folder_dir: HAR
+  src: 24
+  trg: 8
